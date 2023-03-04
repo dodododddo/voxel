@@ -6,7 +6,7 @@ vec3f = ti.types.vector(3,ti.f32)
 vec3i = ti.types.vector(3,ti.i32)
 
 @ti.data_oriented
-class Voxelmap(object):
+class Voxelmap(object): #TODO:第一层指针池太大了，占用率才0.06,要加深层数、减小叉数
     def __init__(self):
         self.probality_grid = ti.field(ti.f32) # 体素地图的叶结点存放该体素被占据的对数概率：y = log(x/1-x)
         self.block1 = ti.root.pointer(ti.ijk,(32,32,32)) # 一级方块指针池
@@ -45,13 +45,13 @@ class Voxelmap(object):
         return probablity
     
     @ti.kernel
-    def flush_map(self):
+    def flush_map(self):# 刷新地图，把太稀疏的一级结点失活。
         for i,j,k in ti.ndrange(32,32,32):
             if ti.is_active(self.block1,[i,j,k]):
                 activation = 0
                 for x,y,z in ti.ndrange(32,32,32):
                     if ti.is_active(self.block2,[32*i + x,32*j + y,32*k + z]):
-                        activation += 1
+                        activation += 1 
                 if activation < 512:
                     ti.deactivate(self.block1,[i,j,k])
 @ti.func
@@ -60,14 +60,11 @@ def Pos2Grid(point:vec3i)->vec3i:
 
 
 
-
-largevolmap = Voxelmap()
-points = read_points('points.txt')
-print(points[78997,2])
-print(points.shape)
-largevolmap.add_points_batch(points)
-print(largevolmap.visit_grid(vec3i(963,919,866)))
-largevolmap.flush_map()
+if __name__ == '__main__':
+    voxelmap = Voxelmap()
+    points = read_points('points.txt')
+    voxelmap.add_points_batch(points)
+    voxelmap.flush_map()
 
 
 

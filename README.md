@@ -6,5 +6,5 @@
 
 ## 具体实现
 Class Voxelmap: 体素地图类，私有变量：八叉树最大层数，分辨率，最大尺寸
-实现方法：init,step，visit,show
-Class Pointcloud: 点云类，即简单的vector<vec3>
+实现方法：init,add_point,visit,show,flush
+
