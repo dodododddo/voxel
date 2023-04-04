@@ -1,7 +1,7 @@
 import numpy as np
 import taichi as ti
 
-ti.init(arch = ti.cpu)
+ti.init(arch = ti.x64)
 vec3i = ti.types.vector(3,ti.i32)
 
 def read_points(path:str)-> ti.field:

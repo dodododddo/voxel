@@ -1,7 +1,7 @@
 from voxel import Voxelmap,vec3i
 from read_points import read_points_fake
 import taichi as ti
-ti.init(arch = ti.cpu)
+ti.init(arch = ti.x64)
 
 
 testpoints = read_points_fake('points.txt')
@@ -20,3 +20,4 @@ visit1 = testmap.visit_grid(vec3i(574,80,395))
 visit2 = testmap.visit_grid(vec3i(20,-20,500))
 visit3 = testmap.visit_grid(vec3i(0,0,0))
 print('visit1 = {},visit2 = {},visit3 = {}'.format(visit1,visit2,visit3))
+
